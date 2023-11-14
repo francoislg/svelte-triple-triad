@@ -20,6 +20,7 @@
 
     /** @param {number} index */
     function applyCard(index) {
+        // Not super clean, but it works
         const card = game[index];
         if (card) {
             const [left, right, top, bottom, _flags] = card;
@@ -68,19 +69,18 @@
 
     /** @param {number} index */
     function switchOwner(index) {
-        cardOwners = cardOwners.map((o, i) => i === index ? (o === 1 ? 2 : 1) : o);
+        cardOwners = cardOwners.map((owner, i) => i === index ? (owner === 1 ? 2 : 1) : owner);
     }
 
     /** @param {number} index */
     function select(index) {
         if (selectedCard) {
-            console.log("Selected", selectedCard);
             if (isPlayer2Turn) {
                 decks = [decks[0], decks[1].map(c => c === selectedCard ? undefined : c)]
             } else {
                 decks = [decks[0].map(c => c === selectedCard ? undefined : c), decks[1]]
             }
-            game = game.map((c, i) => i === index ? selectedCard : c);
+            game = game.map((card, i) => i === index ? selectedCard : card);
             cardOwners = cardOwners.map((o, i) => i === index ? (isPlayer2Turn ? 2 : 1) : o);
             applyCard(index);
             isPlayer2Turn = !isPlayer2Turn;
@@ -92,7 +92,6 @@
     function selectP1(card) {
         if (!isPlayer2Turn) {
             selectedCard = card
-            console.log(selectedCard);
         }
     }
 
@@ -100,7 +99,6 @@
     function selectP2(card) {
         if (isPlayer2Turn) {
             selectedCard = card;
-            console.log(selectedCard);
         }
     }
 
@@ -147,7 +145,6 @@
             {/each}
         </Stack>
     </div>
- 
 
     <div class="flex flex-col items-center gap-2">
         {#if game.every(c => c !== undefined)}
